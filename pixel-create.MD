@@ -7,7 +7,7 @@
 
 
 ### CreatePixelRecordExist
-
+```csharp
 if (!this.DataProvider.CreatePixelRecordExist(param.RetailerId, param.RetailerRegistryCode))
 {
     this.DataProvider.SavePixelCreate(param);
@@ -16,6 +16,7 @@ else
 {
     this.AddHeaderError(param, "Duplicate registry");
 }
+```
 
 验证要创建的pixel数据是否存在于数据库中，如果存在，抛出异常 Duplicate registry，
 如果不存在，则写入数据库。
@@ -48,7 +49,8 @@ AddOutParams:
 
   存储过程执行完成后：
     给param的id赋值，将OriginalMachineId值写入Cookie， 同时写log.
-
+    
+```csharp
     param.Id = DataUtility.ObjectToValue<long>(cmd.Parameters["@CreatePixelId"].Value, 0);
 
     var oldMachineId = DataUtility.ObjectToValue<string>(cmd.Parameters["@OriginalMachineId"].Value, null);
@@ -59,4 +61,5 @@ AddOutParams:
     }
 
     return param.Id;
+```
 
