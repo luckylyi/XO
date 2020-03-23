@@ -3,7 +3,28 @@
 ## Create
 
 ### TryValidateParam(param)
-  验证object结构，有任何错误，抛出400异常，return; JOI即可
+  验证传入的object结构，有任何错误，抛出400异常，return; 我们用JOI验证即可
+  
+#### param结构
+PixelCreateParam ： 
+```csharp
+public long Id { get; set; }
+public long UserId { get; set; }
+public string UUID { get; set; }
+public string SessionId { get; set; }
+public string MachineId { get; set; }
+public string UserAgent { get; set; }
+private const string CREATED_BY = "CreatePixel";
+[Range(1, int.MaxValue, ErrorMessage = "Missing or invalid retailer_uid")]
+public int RetailerId { get; set; }
+[Required(ErrorMessage = "Missing reg")]
+public String RetailerRegistryCode { get; set; }
+public long RegistryClickId { get; set; }
+public String RegistryTrackingCookie { get; private set; }
+public string PixelUrl { get; set; }
+public string PageUrl { get; set; }
+public String CreatedBy
+```
 
 
 ### CreatePixelRecordExist
