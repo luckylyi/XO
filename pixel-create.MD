@@ -4,9 +4,9 @@
 
 ### TryValidateParam(param)
   验证传入的object结构，有任何错误，抛出400异常，return; 我们用JOI验证即可
-  
+
 #### param结构
-PixelCreateParam ： 
+PixelCreateParam ：
 ```csharp
 public long Id { get; set; }
 public long UserId { get; set; }
@@ -44,76 +44,76 @@ else
 
 #### CreatePixelRecordExist
  执行存储过程： tracking.CreatePixelExist
- 
+
  SQL:
 ```SQL
-ALTER PROCEDURE [tracking].[CreatePixelExist] 
-@RetailerId int, 
-@RetailerRegistryCode nvarchar(40) 
-AS 
-BEGIN 
+ALTER PROCEDURE [tracking].[CreatePixelExist]
+@RetailerId int,
+@RetailerRegistryCode nvarchar(40)
+AS
+BEGIN
 
-if exists(select CreatePixelId from tracking.CreatePixel where retailerId = @RetailerId and AltRetailerRegistryCode = @RetailerRegistryCode) 
+if exists(select CreatePixelId from tracking.CreatePixel where retailerId = @RetailerId and AltRetailerRegistryCode = @RetailerRegistryCode)
 
-select 1; 
-else 
-select 0; 
+select 1;
+else
+select 0;
 
 END
 ```
 
 #### SavePixelCreate
  执行存储过程： tracking.InsertCreatePixel
- 
+
  SQL:
  ```SQL
 ALTER PROCEDURE [tracking].[InsertCreatePixel]
-       @RetailerId int, 
-       @RetailerRegistryCode nvarchar(70), 
-       @RegistryClickId bigint, 
-       @UserId bigint, 
-       @SessionId nvarchar(40), 
-       @MachineId nvarchar(40), 
-       @PixelUrl nvarchar(2048), 
-       @PageUrl nvarchar(500), 
-       @RegistryTrackingCookie nvarchar(2000), 
-       @UserAgent nvarchar(200), 
+       @RetailerId int,
+       @RetailerRegistryCode nvarchar(70),
+       @RegistryClickId bigint,
+       @UserId bigint,
+       @SessionId nvarchar(40),
+       @MachineId nvarchar(40),
+       @PixelUrl nvarchar(2048),
+       @PageUrl nvarchar(500),
+       @RegistryTrackingCookie nvarchar(2000),
+       @UserAgent nvarchar(200),
        @CreatedBy nvarchar(40),
-	   @UUID varchar(50), 
+	   @UUID varchar(50),
 	   @CreatePixelId bigint output,
 	   @OriginalMachineId nvarchar(40) output
 AS
 BEGIN
-     
+
 	if @RegistryClickId > 0
 	begin
 		select @OriginalMachineId = MachineId from tracking.RegistryClick WHERE RegistryClickId = @RegistryClickId;
-		if @OriginalMachineId is not null and @MachineId <> @OriginalMachineId 
+		if @OriginalMachineId is not null and @MachineId <> @OriginalMachineId
 			set @MachineId = @OriginalMachineId
 	end
 
 	insert into tracking.CreatePixel
 	(
-		RetailerId, RetailerRegistryCode, RegistryClickId, 
+		RetailerId, RetailerRegistryCode, RegistryClickId,
 		UserId, SessionId, MachineId, PixelUrl, PageUrl, RegistryTrackingCookie, UserAgent, CreatedDate, CreatedBy, AltRetailerRegistryCode, UUID
 	)
 	values
 	(
-		@RetailerId, @RetailerRegistryCode, @RegistryClickId, 
+		@RetailerId, @RetailerRegistryCode, @RegistryClickId,
 		@UserId, @SessionId, @MachineId, @PixelUrl, @PageUrl, @RegistryTrackingCookie, @UserAgent, GETDATE(), @CreatedBy, @RetailerRegistryCode, @UUID
 	)
-	select @CreatePixelId = @@identity;   
+	select @CreatePixelId = @@identity;
 
 END
  ```
- 
+
  OutParams:
   - CreatePixelId
   - OriginalMachineId
 
   存储过程执行完成后：
-    给param的id赋值，将OriginalMachineId值写入Cookie， 同时写log.
-    
+    给param的id赋值，然后检查MachineId和OriginalMachineId是否相同，如果不同，则将OriginalMachineId值写入Cookie，
+
 ```csharp
     param.Id = DataUtility.ObjectToValue<long>(cmd.Parameters["@CreatePixelId"].Value, 0);
 
