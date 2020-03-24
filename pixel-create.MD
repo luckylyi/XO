@@ -44,28 +44,70 @@ else
 
 #### CreatePixelRecordExist
  执行存储过程： tracking.CreatePixelExist
- 参数
-  - RetailerId
-  - RetailerRegistryCode
+ 
+ SQL:
+```SQL
+ALTER PROCEDURE [tracking].[CreatePixelExist] 
+@RetailerId int, 
+@RetailerRegistryCode nvarchar(40) 
+AS 
+BEGIN 
+
+if exists(select CreatePixelId from tracking.CreatePixel where retailerId = @RetailerId and AltRetailerRegistryCode = @RetailerRegistryCode) 
+
+select 1; 
+else 
+select 0; 
+
+END
+```
 
 #### SavePixelCreate
  执行存储过程： tracking.InsertCreatePixel
  
- AddInParams：
-  - RetailerId
-  - RetailerRegistryCode
-  - RegistryClickId (小于等于0，则为null)
-  - UserId
-  - SessionId
-  - MachineId
-  - PixelUrl
-  - PageUrl
-  - RegistryTrackingCookie
-  - UserAgent
-  - CreatedBy
-  - UUID
+ SQL:
+ ```SQL
+ALTER PROCEDURE [tracking].[InsertCreatePixel]
+       @RetailerId int, 
+       @RetailerRegistryCode nvarchar(70), 
+       @RegistryClickId bigint, 
+       @UserId bigint, 
+       @SessionId nvarchar(40), 
+       @MachineId nvarchar(40), 
+       @PixelUrl nvarchar(2048), 
+       @PageUrl nvarchar(500), 
+       @RegistryTrackingCookie nvarchar(2000), 
+       @UserAgent nvarchar(200), 
+       @CreatedBy nvarchar(40),
+	   @UUID varchar(50), 
+	   @CreatePixelId bigint output,
+	   @OriginalMachineId nvarchar(40) output
+AS
+BEGIN
+     
+	if @RegistryClickId > 0
+	begin
+		select @OriginalMachineId = MachineId from tracking.RegistryClick WHERE RegistryClickId = @RegistryClickId;
+		if @OriginalMachineId is not null and @MachineId <> @OriginalMachineId 
+			set @MachineId = @OriginalMachineId
+	end
 
-AddOutParams:
+	insert into tracking.CreatePixel
+	(
+		RetailerId, RetailerRegistryCode, RegistryClickId, 
+		UserId, SessionId, MachineId, PixelUrl, PageUrl, RegistryTrackingCookie, UserAgent, CreatedDate, CreatedBy, AltRetailerRegistryCode, UUID
+	)
+	values
+	(
+		@RetailerId, @RetailerRegistryCode, @RegistryClickId, 
+		@UserId, @SessionId, @MachineId, @PixelUrl, @PageUrl, @RegistryTrackingCookie, @UserAgent, GETDATE(), @CreatedBy, @RetailerRegistryCode, @UUID
+	)
+	select @CreatePixelId = @@identity;   
+
+END
+ ```
+ 
+ OutParams:
   - CreatePixelId
   - OriginalMachineId
 
