@@ -4,7 +4,7 @@
 
 ### 整体代码逻辑
 
-先对传入的Schema进行验证，通过后将Click写入数据库，更新OriginalSourceClickId，写入Cookie，返回Pixel数据。
+先对传入的Schema进行验证，通过后将Click写入数据库，更新OriginalSourceClickId，写入Cookie，返回Pixel数据(一个pixel的图片)。
 
 Code
 ```csharp
