@@ -5,9 +5,9 @@
 - UNION | UNION ALL
 
   ```SQL
-        select 845 primary_service_type_id, 1013 secondary_service_type_id union
-        select 845, 1014 union
-        select 845, 2391;
+    select 845 primary_service_type_id, 1013 secondary_service_type_id union
+    select 845, 1014 union
+    select 845, 2391;
   ```
   
 - Temporary table
