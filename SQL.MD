@@ -49,3 +49,13 @@
     
     select * from service_type_mapper;
   ```
+  
+  
+# 常用SQL语句 (postgres)
+## 查找所有用户表
+```SQL
+SELECT *
+FROM pg_catalog.pg_tables
+WHERE schemaname != 'pg_catalog' AND 
+    schemaname != 'information_schema';
+```
