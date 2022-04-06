@@ -1,5 +1,7 @@
 # SQL 处理数据常用语句
 
+## 常用查询
+
 ## 临时数据处理
 
 - UNION | UNION ALL
@@ -59,3 +61,5 @@ FROM pg_catalog.pg_tables
 WHERE schemaname != 'pg_catalog' AND 
     schemaname != 'information_schema';
 ```
+
+## Postgresql 和 MSSQL的差异
