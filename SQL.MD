@@ -55,6 +55,7 @@
   
 # 常用SQL语句 (postgres)
 ## 查找所有用户表
+Postgres
 ```SQL
 SELECT *
 FROM pg_catalog.pg_tables
@@ -62,4 +63,26 @@ WHERE schemaname != 'pg_catalog' AND
     schemaname != 'information_schema';
 ```
 
+SQL Server
+```SQL
+SELECT * 
+FROM sys.objects
+WHERE type='U'
+```
+
+##查找表的字段名
+Postgres
+```SQL
+select column_name from information_schema.columns
+where table_schema='public' and table_name='vendor'
+```
+
+SQL Server
+```SQL
+SELECT name 
+FROM sys.columns
+WHERE object_id=object_id('tblCustomers')
+```
+
 ## Postgresql 和 MSSQL的差异
+
