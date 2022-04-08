@@ -70,7 +70,8 @@ FROM sys.objects
 WHERE type='U'
 ```
 
-##查找表的字段名
+## 查找表的字段名
+
 Postgres
 ```SQL
 select column_name from information_schema.columns
