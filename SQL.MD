@@ -87,3 +87,5 @@ WHERE object_id=object_id('tblCustomers')
 
 ## Postgresql 和 MSSQL的差异
 
+
+## jsonb的常用查询（数组）
