@@ -87,5 +87,28 @@ WHERE object_id=object_id('tblCustomers')
 
 ## Postgresql 和 MSSQL的差异
 
+- MSSQL是关系型数据库
+- 而Postgreql是对象关系型数据库（NoSQL数据库，具有完整的事务支持，存储JSON文档，约束字段数据）
+- Postgresql区分大小写，而MSSQL是不区分大小写的。
+  - 表名，字段名，值
+  - Postgresql默认会将表名和字段转为小写来处理，如果想要用驼峰式表名或字段名，需要用双引号括起来。
+- 简单查询的区别如：分页实现
+  - 查询前10条记录
+    - ```SQL MSSQL 
+      select top 10 * from tablename (nolock);
+
+      -- 在SQL 2012后的版本中，加入了 offset 和 fetch
+      select * from tblCustomers (nolock)
+      order by customerID 
+      offset 10 rows
+      fetch 10 rows only;
+
+      ```
+    - ```SQL Postgresql
+      select * from service_type 
+      order by service_type_id 
+      limit 10
+      offset 10;
+      ```
 
 ## jsonb的常用查询（数组）
