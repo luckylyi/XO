@@ -92,6 +92,13 @@ WHERE object_id=object_id('tblCustomers')
 - Postgresql区分大小写，而MSSQL是不区分大小写的。
   - 表名，字段名，值
   - Postgresql默认会将表名和字段转为小写来处理，如果想要用驼峰式表名或字段名，需要用双引号括起来。
+  
+- 将NULL值当成空符串处理
+  - MSSQL: isnull(field, '')
+  - PG: coalesce(field, '')
+   
+  https://www.postgresql.org/docs/12/functions-conditional.html#FUNCTIONS-COALESCE-NVL-IFNULL
+
 - 简单查询的区别如：分页实现
   - 查询前10条记录
     - ```SQL MSSQL 
@@ -112,3 +119,32 @@ WHERE object_id=object_id('tblCustomers')
       ```
 
 ## jsonb的常用查询（数组）
+- JSON Functions and Operators
+  https://www.postgresql.org/docs/12/functions-json.html
+- 创建jsonb主从表
+  - ```SQL
+    create table vendor(data jsonb);
+    create table vendor_video(data jsonb);  
+    ```
+  - 创建索引：
+    
+    ```
+    create index vendor_index_on_id on vendor((data->>'id'));
+    ```
+    
+  - 插入测试数据:
+  ```SQL
+  -- 主表 vendor
+  insert into vendor
+  select ('{"id": 1, "name": "lily", "created_at": "' || to_char(current_timestamp, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') || '"}')::jsonb
+  union select ('{"id": 2, "name": "machel", "created_at": "' || to_char(current_timestamp, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') || '"}')::jsonb
+  union select ('{"id": 3, "name": "tony", "created_at": "' || to_char(current_timestamp, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') || '"}')::jsonb;
+
+  -- 从表 vendor_video
+  insert into vendor_video
+  select '{"id": 1001, "vendor_id": 1, "videos": [{"url": "https://youtube.com/watch?v=JmBgOJIPBbw","sort":1,"active":false}, {"url": "https://youtube.com/watch?v=JmBgOJIPBbw","sort":2,"active":true}]}'::jsonb
+  union select '{"id": 1002, "vendor_id": 2, "videos": [{"url": "https://youtube.com/watch?v=JmBgOJIPBbw&a=2","sort":1,"active":true}, {"url": "https://youtube.com/watch?v=JmBgOJIPBbw&a=2","sort":2,"active":true}]}'::jsonb
+  union select '{"id": 1005, "vendor_id": 3, "videos": [{"url": "https://youtube.com/watch?v=JmBgOJIPBbw&b=3","sort":1,"active":true}, {"url": "https://youtube.com/watch?v=JmBgOJIPBbw&b=3","sort":2,"active":true}]}'::jsonb;
+  ```
+  
+
