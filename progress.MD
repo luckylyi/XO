@@ -4,7 +4,7 @@ Development Progress Update - 2022/06/01:
     - End Date: 2022/06/01
     - Progress: 90%
     - Blockers: 
-      - Blocker 1;
+      - None;
     - Issues:
       - Automatically log out user when there is no any action for a period of time;
 
@@ -32,5 +32,14 @@ Development Progress Update - 2022/06/01:
     - Progress: 60%
     - Blockers: 
       - New change would be made on the category & location submission interaction logic;
+    - Issues:
+      - None;
+      
+5. Epic name: v1.14.0 Star Rating Analyzer
+    - Start Date: 2022/04/06
+    - End Date: 2022/06/15
+    - Progress: 100%
+    - Blockers: 
+      - None;
     - Issues:
       - None;
