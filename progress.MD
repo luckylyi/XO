@@ -1,11 +1,36 @@
 Development Progress Update - 2022/06/01:
-1. Epic name: OAuth
- Start Date: 2022/06/01
-  - End Date: 2022/06/04
-Progress: 90%
-Blockers:
-Blocker 1;
-Blocker 2;
-Issues:
-Issues 1;
-Issues 2;
+1. Epic name: OAuths Update
+    - Start Date: 2022/05/01
+    - End Date: 2022/06/01
+    - Progress: 90%
+    - Blockers: 
+      - Blocker 1;
+    - Issues:
+      - refresh_token在登录一段时间后会失效;
+
+2. Epic name: Billing info
+    - Start Date: 2022/05/23
+    - End Date: 2022/07/13
+    - Progress: 40%
+    - Blockers: 
+      - None;
+    - Issues:
+      - None;
+
+3. Epic name: Event Pay
+    - Start Date: 2022/05/23
+    - End Date: 2022/07/13
+    - Progress: 20%
+    - Blockers: 
+      - Need to spike for how to using stripe account APIs;
+    - Issues:
+      - None;
+
+4. Epic name: Statistics and Analyzer
+    - Start Date: 2022/04/20
+    - End Date: 2022/06/29
+    - Progress: 60%
+    - Blockers: 
+      - New change would be made on the category & location submission interaction logic;
+    - Issues:
+      - None;
