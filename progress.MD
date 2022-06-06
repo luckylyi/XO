@@ -1,4 +1,4 @@
-Development Progress Update - 2022/06/01:
+Development Progress Update - 2022/06/06:
 1. Epic name: OAuths Update
     - Start Date: 2022/05/01
     - End Date: 2022/06/01
