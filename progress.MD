@@ -6,7 +6,7 @@ Development Progress Update - 2022/06/01:
     - Blockers: 
       - Blocker 1;
     - Issues:
-      - refresh_token在登录一段时间后会失效;
+      - Automatically log out user when there is no any action for a period of time;
 
 2. Epic name: Billing info
     - Start Date: 2022/05/23
