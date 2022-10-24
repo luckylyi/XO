@@ -101,7 +101,8 @@ WHERE object_id=object_id('tblCustomers')
 
 - 简单查询的区别如：分页实现
   - 查询前10条记录
-    - ```SQL MSSQL 
+    - ```SQL 
+      -- MSSQL 
       select top 10 * from tablename (nolock);
 
       -- 在SQL 2012后的版本中，加入了 offset 和 fetch
@@ -111,7 +112,8 @@ WHERE object_id=object_id('tblCustomers')
       fetch 10 rows only;
 
       ```
-    - ```SQL Postgresql
+    - ```SQL
+      -- Postgresql
       select * from service_type 
       order by service_type_id 
       limit 10
@@ -147,4 +149,102 @@ WHERE object_id=object_id('tblCustomers')
   union select '{"id": 1005, "vendor_id": 3, "videos": [{"url": "https://youtube.com/watch?v=JmBgOJIPBbw&b=3","sort":1,"active":true}, {"url": "https://youtube.com/watch?v=JmBgOJIPBbw&b=3","sort":2,"active":true}]}'::jsonb;
   ```
   
-
+- 查询：
+```SQL
+  -- 
+  select data->>'id' as id
+  , data->>'name' as name
+  , data->>'created_at' as created_at
+  from vendor 
+  where data->>'id'='1';
+  
+  -- 关联查询
+  select v.data->>'id' as id
+  , v.data->>'name' as name
+  , v.data->>'created_at' as created_at
+  , map->>'url' as video_url
+  , map->>'sort' as video_sort
+  , map->>'active' as video_status
+  from vendor v 
+  inner join vendor_video vv on v.data->>'id' = vv.data->>'vendor_id'
+  , jsonb_array_elements(vv.data->'videos') map
+  where v.data->>'id'='1';
+  
+  -- 关联查询，加子表过滤条件
+  select v.data->>'id' as id
+  , v.data->>'name' as name
+  , v.data->>'created_at' as created_at
+  , map->>'url' as video_url
+  , map->>'sort' as video_sort
+  , map->>'active' as video_status
+  from vendor v 
+  inner join vendor_video vv on v.data->>'id' = vv.data->>'vendor_id'
+  , jsonb_array_elements(vv.data->'videos') map
+  where v.data->>'id'='1' and map->>'active'='true';
+  
+  -- 关联查询，加子表过滤条件，用对象查询(查询vendors的videos中包含至少一项active=false的记录)
+  select v.data->>'id' as id
+  , v.data->>'name' as name
+  , v.data->>'created_at' as created_at
+  , map->>'url' as video_url
+  , map->>'sort' as video_sort
+  , map->>'active' as video_status
+  from vendor v 
+  inner join vendor_video vv on v.data->>'id' = vv.data->>'vendor_id'
+  , jsonb_array_elements(vv.data->'videos') map
+  where v.data->>'id'='1' and vv.data->'videos' @> '[{"active":false}]';
+  
+  -- 在jsonb数据中删除指定的字段
+  select map #- '{active}' from vendor_video,
+  jsonb_array_elements(data->'videos') as map;
+  
+  -- 数组中删除指定的值
+  select '["1", "2", "3", "4", "5", "6"]'::jsonb - '1' - '3';
+  select '["1", "2", "3", "4", "5", "6"]'::jsonb - 1 - 3;
+  
+  -- 重新生成新的对象
+  select jsonb_build_object('id', 1, 'name', 'lily');
+  
+  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+  SELECT jsonb_build_object(
+      'id', uuid_generate_v4(),
+    'vendor_id', data->>'id',
+    'name', data->>'name',
+      'showCalculator', true,
+      'active', 'true',
+      'timestamp', jsonb_build_object('createdAt', to_char(current_timestamp, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'), 'updatedAt', to_char(current_timestamp, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')),
+      'actors', jsonb_build_object('createdBy', uuid_nil(), 'updatedBy', uuid_nil()),
+      'source', jsonb_build_object('application','The Knot Pro')
+      ) FROM vendor;
+  
+  -- 更新对象，或给对象添加新的属性和值
+  select 
+  jsonb_set(
+    jsonb_set(
+      '{"name": "lily"}'::jsonb,
+      '{id}',
+      '1'::jsonb
+    ),
+    '{sex}',
+    '"man"'::jsonb
+  )
+  
+  -- update name
+  update vendor v
+  set data=jsonb_set(
+  data,
+  '{name}',
+   concat('"', data->>'name', '-01"')::jsonb
+  )
+  where data->>'id'='3';
+  
+  -- add age
+  update vendor v
+  set data=jsonb_set(
+  data,
+  '{age}',
+   '25'::jsonb
+  )
+  where data->>'id'='3';
+  
+```
