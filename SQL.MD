@@ -1,5 +1,77 @@
 # SQL 处理数据常用语句
 
+## 入门基础
+- What is SQL?
+  - SQL stands for Structured Query Language (结构化查询语言）
+  - SQL能做什么？
+    - SQL 可以对数据库执行查询
+    - SQL 可以从数据库中检索数据
+    - SQL 可以在数据库中插入记录
+    - SQL 可以更新数据库中的记录
+    - SQL 可以从数据库中删除记录
+    - SQL 可以创建新的数据库
+    - SQL 可以在数据库中创建新表
+    - SQL 可以在数据库中创建存储过程
+    - SQL 可以在数据库中创建视图
+    - SQL 可以设置表、过程和视图的权限 
+    
+  - 我们通常会用到的 SQL 命令
+    - `SELECT` 从数据库中提取数据
+    - `UPDATE` 更新数据库中的数据
+    - `DELETE` 从数据库中删除数据
+    - `INSERT` INTO 将新数据插入数据库
+    - `CREATE` DATABASE 创建一个新的数据库
+    - `ALTER` DATABASE 修改数据库
+    - `CREATE` TABLE 创建一个新表
+    - `ALTER` TABLE 修改表
+    - `DROP` TABLE 删除一个表
+    - `CREATE` INDEX 创建索引(用于搜索的键)
+    - `DROP` INDEX 删除索引  
+  - 注意点
+    - 关键字不区分大小写
+    - SQL语句未尾加分号对多条SQL语句进行分割
+      - 有些数据库是支持返回多条查询的结果的，比如MSSQL，加上分号可以防止多条SQL因为多条SQL查询合并到一行时报错。 
+
+
+- 查询某个表的数据
+```SQL
+SELECT column1, column2, ... 
+FROM table_name;
+-- 把 column_name 换成 * 号可以返回表中的所有字段。 如果一个表有非常多的字段时，不建议这样做，因为返回太多不必要的字段会浪费数据库性能，特别是数据量很大的时候。
+
+-- Example:
+SELECT vendor_id FROM vendor;
+```
+  - 查询不重复的数据
+  ```SQL
+  SELECT DISTINCT column1, column2, ...
+  FROM table_name;
+  ```
+  - 加上 `WHERE` 条件对数据进行过滤
+    - WHERE 条件不仅作用于 SELECT 语句，还用于 UPDATE、 DELETE 等！
+  ```SQL
+  SELECT column1, column2, ...
+  FROM table_name
+  WHERE condition;  
+  
+  -- AND, OR, NOT
+  AND 显示由 AND 分隔的条件同时为TRUE的记录。
+  SELECT * 
+  FROM vendor
+  WHERE legacy_id=9921 AND vendor_status=1; 
+
+  OR 显示 OR 分隔的任何条件为TRUE的记录。
+  SELECT * 
+  FROM vendor
+  WHERE legacy_id=9921 OR legacy_id=31959;
+  
+  NOT 显示条件为FALSE的记录。（取反）
+  SELECT * 
+  FROM vendor
+  WHERE NOT legacy_id <> 9921;
+  
+  ```
+  
 ## 常用查询
 
 ## 临时数据处理
