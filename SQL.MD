@@ -13,7 +13,7 @@
     - SQL 可以在数据库中创建新表
     - SQL 可以在数据库中创建存储过程
     - SQL 可以在数据库中创建视图
-    - SQL 可以设置表、过程和视图的权限 
+    - SQL 可以设置表、存储过程和视图的权限 
     
   - 我们通常会用到的 SQL 命令
     - `SELECT` 从数据库中提取数据
@@ -55,21 +55,46 @@ SELECT vendor_id FROM vendor;
   WHERE condition;  
   
   -- AND, OR, NOT
-  AND 显示由 AND 分隔的条件同时为TRUE的记录。
+  -- AND 显示由 AND 分隔的条件同时为TRUE的记录。
   SELECT * 
   FROM vendor
   WHERE legacy_id=9921 AND vendor_status=1; 
 
-  OR 显示 OR 分隔的任何条件为TRUE的记录。
+  -- OR 显示 OR 分隔的任何条件为TRUE的记录。
   SELECT * 
   FROM vendor
   WHERE legacy_id=9921 OR legacy_id=31959;
   
-  NOT 显示条件为FALSE的记录。（取反）
+  -- NOT 显示条件为FALSE的记录。（取反）
   SELECT * 
   FROM vendor
   WHERE NOT legacy_id <> 9921;
   
+  -- IN 显示包含给出LIST值的记录
+  SELECT * 
+  FROM vendor
+  WHERE NOT legacy_id IN(9921, 31959);
+  
+  -- LIKE 显示某个字段中包含给出值的记录（%代表任意值，模糊查询）
+  SELECT * 
+  FROM vendor
+  WHERE name like '%tom%';
+  
+  -- SQL 通配符
+  > * 
+  
+  
+  ```
+  - 排序 ORDER BY Syntax
+  ```
+  SELECT column1, column2, ...
+  FROM table_name
+  ORDER BY column1, column2, ... ASC|DESC;
+  
+  -- Example
+  SELECT *
+  FROM vendor
+  ORDER BY name DESC;
   ```
   
 ## 常用查询
