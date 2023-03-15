@@ -1,6 +1,7 @@
 # SQL 处理数据常用语句
 
 ## 入门基础
+- https://www.w3schools.cn/sql/sql_intro.html
 - What is SQL?
   - SQL stands for Structured Query Language (结构化查询语言）
   - SQL能做什么？
